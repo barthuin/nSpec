@@ -1,0 +1,40 @@
+# Workflow Patterns
+
+## Standard Patterns
+
+### 1. Webhook → Process → Respond
+Synchronous pattern for API-style workflows.
+```
+Webhook Trigger → Validate Input → Transform → Action → Respond to Webhook
+```
+
+### 2. Schedule → Fetch → Process → Notify
+Batch processing pattern for periodic tasks.
+```
+Schedule Trigger → Fetch Data → Filter/Transform → Bulk Action → Notify Result
+```
+
+### 3. Event → Enrich → Route → Act
+Event-driven pattern with conditional branching.
+```
+Event Trigger → Enrich Data → IF/Switch → [Branch A] / [Branch B] → Merge → Notify
+```
+
+### 4. AI Agent Loop
+Autonomous agent pattern with tool use.
+```
+Trigger → AI Agent → [Tool calls] → Validate Output → Store Result → Notify
+```
+
+### 5. Error Handling Pattern
+Standard error capture and notification.
+```
+Any node failure → Error Trigger → Format Error → Notify (Slack/Email) → Log to DB
+```
+
+## Anti-patterns
+
+- **God workflows** — one workflow doing more than one thing
+- **Hardcoded credentials** — always use n8n credential store
+- **Silent failures** — every workflow must have an error handler
+- **Undocumented branches** — every IF/Switch branch must have a sticky note

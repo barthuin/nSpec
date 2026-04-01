@@ -1,0 +1,36 @@
+# Node Standards
+
+## General Rules
+
+- Every node must have a descriptive name (no default "HTTP Request1" names)
+- Every non-trivial node must have a sticky note explaining its purpose
+- Pinned test data is required for nodes that fetch external data
+
+## Node-Specific Standards
+
+### HTTP Request
+- Always set timeout (default: 30000ms)
+- Always handle 4xx and 5xx responses explicitly
+- Use `$credentials` for authentication, never hardcode tokens
+
+### Code (JavaScript)
+- Follow @n8n-code-javascript skill standards
+- Max 50 lines per Code node — split into multiple nodes if longer
+- Always return an array of objects
+
+### IF / Switch
+- Document each branch with a sticky note
+- Default/fallback branch is mandatory
+
+### AI Agent
+- Follow @ai-agent-standards.mdc
+- Always set a system prompt
+- Define tools explicitly — no open-ended tool access
+
+### Set / Edit Fields
+- Use dot notation for nested fields
+- Document the purpose of each field being set
+
+### Error Trigger
+- Every workflow must have one
+- Connect to a notification node (Slack, email, or webhook)

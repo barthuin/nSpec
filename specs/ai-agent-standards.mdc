@@ -1,0 +1,42 @@
+# AI Agent Standards
+
+## Agent Workflow Principles
+
+1. **Single purpose** — each AI agent workflow solves one problem
+2. **Explicit tools** — define only the tools the agent needs
+3. **Bounded context** — limit the system prompt to what is necessary
+4. **Human-in-the-loop** — include approval steps for irreversible actions
+5. **Output validation** — always validate agent output before using it downstream
+
+## System Prompt Standards
+
+Every AI Agent node must include:
+- Role definition (who the agent is)
+- Task description (what it must do)
+- Output format (what structure to return)
+- Constraints (what it must NOT do)
+
+```
+You are a [ROLE].
+Your task is to [TASK DESCRIPTION].
+Return your response as [OUTPUT FORMAT].
+Do not [CONSTRAINTS].
+```
+
+## Tool Definition Rules
+
+- Only expose tools the agent strictly needs
+- Document each tool with a description the agent can understand
+- Prefer n8n built-in tools (HTTP, Code) over external MCPs when possible
+
+## Memory & Context
+
+- Use session memory for multi-turn conversations
+- Use external storage (DB, vector store) for persistent memory
+- Never store sensitive data (credentials, PII) in agent memory
+
+## Models
+
+- Default to the latest Claude model for complex reasoning tasks
+- Use smaller/faster models for classification or simple extraction
+- Document the model choice and rationale in the workflow spec

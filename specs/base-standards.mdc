@@ -1,0 +1,41 @@
+# nSpec Base Standards
+
+## Core Principles
+
+1. **Specs first** — every workflow starts as a spec, never as a blank canvas
+2. **Atomic workflows** — each workflow has a single, well-defined responsibility
+3. **Error handling is mandatory** — every workflow includes an error handler with notification
+4. **Idempotency** — workflows must be safely re-executable without side effects
+5. **Baby steps** — build and test node by node, never the full workflow at once
+6. **Validate assumptions** — never infer what is not explicitly stated in the spec
+7. **Reuse before rebuild** — check integration catalog and patterns before creating new nodes
+
+## Naming Conventions
+
+- Workflow names: `[TRIGGER_TYPE]-[DOMAIN]-[ACTION]`
+  - Examples: `webhook-lead-qualify`, `schedule-invoice-send`, `manual-crm-sync`
+- Node names: descriptive, verb-noun format in English
+  - Examples: `Filter Active Contacts`, `Transform Lead Data`, `Send Slack Notification`
+- Variables and expressions: camelCase, English only
+
+## Language Standards
+
+- Node names, variables, expressions, commit messages: **English only**
+- Sticky notes and inline documentation: English preferred, Spanish allowed
+- Specs and plans: English only
+
+## Workflow Architecture
+
+Every workflow MUST follow this pattern:
+
+```
+[Trigger] → [Validate/Filter] → [Transform] → [Action(s)] → [Success notify]
+                                                           ↘ [Error handler]
+```
+
+## References
+
+- @workflow-patterns.mdc
+- @node-standards.mdc
+- @ai-agent-standards.mdc
+- @credential-standards.mdc
