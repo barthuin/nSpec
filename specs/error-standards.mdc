@@ -1,0 +1,107 @@
+# Error Standards
+
+## Error Categories
+
+Every error in an n8n workflow belongs to one of these categories:
+
+| Category | Code | Description | Default Action |
+|---|---|---|---|
+| **Config** | `ERR_CONFIG` | Wrong node setup, type mismatch, missing required field | Fix configuration, do not retry |
+| **Data** | `ERR_DATA` | Unexpected input shape, missing required field, invalid value | Validate upstream, send to DLQ |
+| **Auth** | `ERR_AUTH` | Invalid credential, expired token, insufficient permissions | Alert ops, do not retry automatically |
+| **Integration** | `ERR_INTEGRATION` | External service timeout, 5xx, network error | Retry with backoff, alert after N failures |
+| **Logic** | `ERR_LOGIC` | Unexpected branch reached, assertion failed, infinite loop | Alert dev, stop execution |
+| **Resource** | `ERR_RESOURCE` | Rate limit (429), quota exceeded, storage full | Exponential backoff, alert |
+
+## Standard Error Object
+
+All error notifications must include this structure:
+
+```json
+{
+  "error": {
+    "category": "ERR_INTEGRATION",
+    "workflow": "{{ $workflow.name }}",
+    "node": "{{ $node.name }}",
+    "executionId": "{{ $execution.id }}",
+    "message": "{{ $json.error.message }}",
+    "timestamp": "{{ $now.toISO() }}",
+    "input": "{{ $json }}"
+  }
+}
+```
+
+## Retry Policy by Category
+
+| Category | Retry? | Max Retries | Backoff |
+|---|---|---|---|
+| Config | No | 0 | — |
+| Data | No | 0 | — |
+| Auth | No | 0 | — |
+| Integration | Yes | 3 | Exponential (1s, 2s, 4s) |
+| Logic | No | 0 | — |
+| Resource | Yes | 5 | Exponential (5s, 10s, 20s...) |
+
+## Error Handling Architecture
+
+### Every workflow MUST have:
+
+```
+[Error Trigger]
+      ↓
+[Format Error Message]   ← uses Standard Error Object above
+      ↓
+[Notify Ops]             ← Slack, email, or webhook
+```
+
+### Recommended: Dead Letter Queue pattern for data errors
+
+```
+[Validate Input]
+      ↓ (invalid)
+[Send to DLQ]            ← store in DB or Notion for manual review
+      ↓
+[Notify for Review]
+```
+
+## Node-Level Error Handling
+
+### HTTP Request nodes
+
+```
+[HTTP Request]
+      ↓ (on error: continue)
+[Check Status]           ← IF node: statusCode >= 400
+      ↓ (true)
+[Handle HTTP Error]      ← categorize as ERR_INTEGRATION or ERR_AUTH
+```
+
+### AI Agent nodes
+
+```
+[AI Agent]
+      ↓
+[Validate Output]        ← Code node or IF: check response format
+      ↓ (invalid)
+[Handle Agent Error]     ← categorize as ERR_DATA
+```
+
+## Error Message Standards
+
+Error notifications must be:
+- **Actionable**: include what failed and what to do about it
+- **Traceable**: include execution ID for debugging
+- **Contextual**: include the input that caused the error (redact PII)
+
+Template for Slack/email notifications:
+
+```
+🔴 Workflow Error: {workflow name}
+Node: {node name}
+Type: {error category}
+Message: {error message}
+Execution: {execution ID}
+Time: {timestamp}
+
+Next step: {link to debug runbook or n8n execution URL}
+```

@@ -3,15 +3,21 @@
 Given an approved plan in `changes/$ARGUMENTS/plan.md`:
 
 1. Read the plan file
-2. Load @node-standards.mdc as context
-3. Act as the **node-developer** agent
-4. For each node in the plan:
-   a. Use `search_nodes` to confirm the correct node type
+2. Load @node-standards.mdc and @credential-standards.mdc as context
+3. **Skill check — run before continuing:**
+   - Count how many `code` type nodes appear in the plan
+   - If ≥ 1 Code node → load skill **`n8n-code-javascript`**
+   - If no Code nodes → do NOT load that skill (saves ~18,500 tokens)
+   - Always load skill **`n8n-mcp-tools-expert`**
+4. Act as the **node-developer** agent
+5. For each node in the plan:
+   a. Use **`n8n-mcp-tools-expert`** skill → `search_nodes` to confirm the correct node type
    b. Configure the node following @node-standards.mdc
-   c. Validate with `validate_node`
-5. Search for similar templates: `search_templates`
-6. Assemble the complete workflow JSON
-7. Validate the full workflow: `n8n_validate_workflow`
-8. Save to `changes/$ARGUMENTS/workflow.json`
+   c. Use **`n8n-mcp-tools-expert`** skill → `validate_node` to validate
+   d. For Code nodes: use **`n8n-code-javascript`** skill for implementation
+6. Search for similar templates: `search_templates`
+7. Assemble the complete workflow JSON
+8. Validate the full workflow: `n8n_validate_workflow`
+9. Save to `changes/$ARGUMENTS/workflow.json`
 
 Do NOT deploy yet. Save and report validation result.

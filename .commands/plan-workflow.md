@@ -4,9 +4,11 @@ Given enriched requirements in `changes/$ARGUMENTS/requirements.md`:
 
 1. Read the requirements file
 2. Load @base-standards.mdc, @workflow-patterns.mdc, @node-standards.mdc
-3. Act as the **workflow-architect** agent
-4. Design the complete workflow architecture
-5. Save the plan to `changes/$ARGUMENTS/plan.md`
+3. Use the **`n8n-workflow-patterns`** skill to select the right architectural
+   pattern and identify standard building blocks
+4. Act as the **workflow-architect** agent
+5. Design the complete workflow architecture
+6. Save the plan to `changes/$ARGUMENTS/plan.md`
 
 The plan must include:
 - [ ] Trigger type and configuration

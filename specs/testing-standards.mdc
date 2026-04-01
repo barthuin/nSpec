@@ -1,0 +1,59 @@
+# Testing Standards
+
+## Core Testing Principles
+
+1. **Test before deploy** — every workflow must pass test scenarios before going live
+2. **Pin test data** — external data nodes must have pinned test data
+3. **Test the sad path** — error scenarios are as important as happy path
+4. **Isolate external calls** — use pinned data to avoid hitting live services during testing
+5. **Deterministic tests** — test scenarios must produce the same result every run
+
+## Test Scenario Structure
+
+Every workflow spec must include test scenarios covering:
+
+```markdown
+## Test Scenarios
+
+### Happy Path
+- Input: (exact data structure)
+- Expected output: (exact fields and values)
+- Expected side effects: (notifications sent, DB records created, etc.)
+
+### Edge Cases
+- Empty input: what happens with null or empty data
+- Partial data: required fields missing
+- Boundary values: max/min sizes, date edge cases
+
+### Error Scenarios
+- External service unavailable: expected notification and graceful exit
+- Invalid input: expected validation error and response
+- Auth failure: expected credential error handling
+```
+
+## Pinned Test Data Rules
+
+- Required on ALL nodes that fetch external data (HTTP Request, DB query, API node)
+- Must represent realistic data shapes — no placeholder strings like "test" or "123"
+- Must include at least one edge case (empty array, null field, max-length string)
+- Never use production data as pinned test data (PII concern)
+
+## Manual Test Checklist
+
+Before every deployment, verify:
+
+- [ ] Happy path executed successfully end-to-end
+- [ ] Error Trigger fires correctly on simulated failure
+- [ ] No sensitive data appears in execution logs
+- [ ] Notification nodes send correctly formatted messages
+- [ ] Idempotency: running workflow twice produces no duplicate side effects
+- [ ] All IF/Switch branches have been exercised at least once
+
+## AI Agent Testing
+
+When testing workflows with AI Agent nodes:
+
+- Pin sample outputs that represent the agent's expected response format
+- Test with inputs that should trigger the fallback/error path
+- Verify output validation node correctly rejects malformed agent responses
+- Test with boundary inputs (very long text, special characters, empty strings)
