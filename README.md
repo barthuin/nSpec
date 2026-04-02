@@ -43,11 +43,11 @@ nSpec has two entry points depending on your context:
 
 #### Flow A — Team (a PO or client writes the requirements)
 
-```bash
-mkdir changes/WF-001
-cp templates/requirements.md changes/WF-001/requirements.md
-# fill in requirements.md with the workflow description
 ```
+/init-workflow WF-001
+```
+Select **Flow A**. Claude creates `changes/WF-001/` and copies the requirements template.
+Open `changes/WF-001/requirements.md`, fill in the workflow description, then:
 
 ```
 /enrich-workflow-spec WF-001
@@ -58,11 +58,11 @@ Claude adds missing technical details to the requirements.
 
 #### Flow B — Freelance (you talk directly to the client)
 
-```bash
-mkdir changes/WF-001
-cp templates/client-notes.md changes/WF-001/client-notes.md
-# paste raw client input — meeting notes, email, WhatsApp, anything
 ```
+/init-workflow WF-001
+```
+Select **Flow B**. Claude creates `changes/WF-001/` and copies the client-notes template.
+Paste the raw client input (meeting notes, email, WhatsApp — anything) into `changes/WF-001/client-notes.md`, then:
 
 ```
 /capture-requirements WF-001
@@ -138,6 +138,7 @@ your-project/
 │   └── workflow-reviewer.md      # Reviews JSON against all standards
 │
 ├── .commands/                    # Slash commands for Claude Code
+│   ├── init-workflow.md          # Create changes folder and copy templates
 │   ├── enrich-workflow-spec.md   # Add technical detail to raw requirements
 │   ├── plan-workflow.md          # Generate architecture plan
 │   ├── build-workflow.md         # Build workflow JSON from plan
@@ -172,6 +173,12 @@ your-project/
 ---
 
 ## Command Reference
+
+### Setup (both flows)
+
+| Command | Input | What it does |
+|---------|-------|-------------|
+| `/init-workflow {WF-ID}` | — | Creates `changes/{WF-ID}/` and copies the right template |
 
 ### Flow A — Team
 
