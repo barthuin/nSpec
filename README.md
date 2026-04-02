@@ -12,15 +12,15 @@ It bridges human intent and machine execution: you write a specification, AI age
 Human intent → Spec → Agent → Workflow → Execution
 ```
 
-nSpec is a **Spec-Driven AI Workflow Orchestration Framework**. It enables developers to define automation workflows as structured specifications, which are then interpreted, generated, and deployed as executable n8n workflows by specialized AI agents (Claude Code).
+nSpec is a **Spec-Driven AI Workflow Orchestration Framework**. It enables developers to define automation workflows as structured specifications, which are then interpreted, generated, and deployed as executable n8n workflows by any AI coding agent.
 
 ---
 
 ## Prerequisites
 
-- [Claude Code](https://claude.ai/code) installed and running
+- An AI coding agent (see [Supported agents](#supported-agents))
 - An n8n instance (local or cloud)
-- The [n8n-mcp](https://github.com/czlonkowski/n8n-mcp) MCP server configured in Claude Code
+- The [n8n-mcp](https://github.com/czlonkowski/n8n-mcp) MCP server configured in your agent
 
 ---
 
@@ -301,14 +301,17 @@ Claude will analyze the impact, update the plan, rebuild only what changed, revi
 
 ---
 
-## Multi-Copilot Support
+## Supported Agents
 
-nSpec works with any AI coding assistant:
+nSpec works with any AI coding agent that can read project instructions and execute slash commands:
 
-| File | AI tool |
-|------|---------|
-| `CLAUDE.md` | Claude Code |
-| `AGENTS.md` | OpenAI Codex, GitHub Copilot, Cursor, Windsurf, Gemini CLI |
+| Config file | Agent |
+|-------------|-------|
+| `CLAUDE.md` | [Claude Code](https://claude.ai/code) |
+| `AGENTS.md` | [GitHub Copilot](https://github.com/features/copilot), [Cursor](https://cursor.sh), [Windsurf](https://codeium.com/windsurf), [Gemini CLI](https://github.com/google-gemini/gemini-cli), OpenAI Codex |
+
+Each agent reads its own config file — both load the same specs, agents, and commands.
+MCP tool support (required for `n8n-mcp`) may vary by agent; check your agent's documentation.
 
 ---
 
