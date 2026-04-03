@@ -30,7 +30,7 @@ nSpec is a **Spec-Driven AI Workflow Orchestration Framework**. It enables devel
 
 ```bash
 git clone https://github.com/barthuin/nSpec.git
-cp -r nSpec/{CLAUDE.md,AGENTS.md,specs,skills,.agents,.commands,templates,changes} your-project/
+cp -r nSpec/{CLAUDE.md,AGENTS.md,.claude,templates,changes} your-project/
 ```
 
 Or use the repo directly as your working directory.
@@ -88,9 +88,19 @@ From here both flows converge:
 The `workflow-architect` agent designs the full node architecture. Review `changes/WF-001/plan.md` and approve it before continuing.
 
 ```
+/clear
+```
+Resets the conversation context. State is preserved on disk in `changes/WF-001/`.
+
+```
 /build-workflow WF-001
 ```
 The `node-developer` agent builds the workflow JSON node by node, validating each one with n8n MCP tools.
+
+```
+/clear
+```
+Resets context again before QA — unloads the heavy build skills (~27k tokens).
 
 ```
 /validate-workflow WF-001
@@ -121,38 +131,39 @@ your-project/
 ├── CLAUDE.md                     # Entry point for Claude Code — loads all specs
 ├── AGENTS.md                     # Entry point for other AI tools (Cursor, Copilot, etc.)
 │
-├── specs/                        # Standards (single source of truth)
-│   ├── base-standards.mdc        # Core rules and naming conventions
-│   ├── node-standards.mdc        # Per-node configuration rules
-│   ├── workflow-patterns.mdc     # Architectural patterns (webhook, schedule, AI agent...)
-│   ├── credential-standards.mdc  # How to handle credentials safely
-│   ├── ai-agent-standards.mdc    # Rules for AI Agent nodes
-│   ├── testing-standards.mdc     # Test scenario structure and checklist
-│   └── error-standards.mdc       # Error categories, retry policy, notification format
-│
-├── .agents/                      # AI agent role definitions
-│   ├── workflow-architect.md     # Designs architecture — never implements
-│   ├── ai-agent-builder.md       # Configures AI Agent nodes
-│   ├── node-developer.md         # Implements node by node
-│   ├── integration-specialist.md # Designs external service connections
-│   └── workflow-reviewer.md      # Reviews JSON against all standards
-│
-├── .commands/                    # Slash commands for Claude Code
-│   ├── init-workflow.md          # Create changes folder and copy templates
-│   ├── enrich-workflow-spec.md   # Add technical detail to raw requirements
-│   ├── plan-workflow.md          # Generate architecture plan
-│   ├── build-workflow.md         # Build workflow JSON from plan
-│   ├── validate-workflow.md      # Automated standards validation
-│   ├── review-workflow.md        # Deep review with actionable fixes
-│   ├── deploy-workflow.md        # Deploy to n8n instance
-│   ├── document-workflow.md      # Generate README documentation
-│   ├── debug-workflow.md         # Debug failing workflows
-│   └── iterate-workflow.md       # Modify existing deployed workflows
-│
-├── skills/                       # Specialized knowledge for Claude Code
-│   ├── n8n-code-javascript/      # How to write JS in Code nodes
-│   ├── n8n-workflow-patterns/    # Proven architectural patterns
-│   └── n8n-mcp-tools-expert/     # How to use n8n MCP tools effectively
+├── .claude/                      # Claude Code configuration (auto-discovered)
+│   ├── specs/                    # Standards (single source of truth)
+│   │   ├── base-standards.mdc        # Core rules and naming conventions
+│   │   ├── node-standards.mdc        # Per-node configuration rules
+│   │   ├── workflow-patterns.mdc     # Architectural patterns (webhook, schedule, AI agent...)
+│   │   ├── credential-standards.mdc  # How to handle credentials safely
+│   │   ├── ai-agent-standards.mdc    # Rules for AI Agent nodes
+│   │   ├── testing-standards.mdc     # Test scenario structure and checklist
+│   │   └── error-standards.mdc       # Error categories, retry policy, notification format
+│   │
+│   ├── agents/                   # AI agent role definitions
+│   │   ├── workflow-architect.md     # Designs architecture — never implements
+│   │   ├── ai-agent-builder.md       # Configures AI Agent nodes
+│   │   ├── node-developer.md         # Implements node by node
+│   │   ├── integration-specialist.md # Designs external service connections
+│   │   └── workflow-reviewer.md      # Reviews JSON against all standards
+│   │
+│   ├── commands/                 # Slash commands for Claude Code
+│   │   ├── init-workflow.md          # Create changes folder and copy templates
+│   │   ├── enrich-workflow-spec.md   # Add technical detail to raw requirements
+│   │   ├── plan-workflow.md          # Generate architecture plan
+│   │   ├── build-workflow.md         # Build workflow JSON from plan
+│   │   ├── validate-workflow.md      # Automated standards validation
+│   │   ├── review-workflow.md        # Deep review with actionable fixes
+│   │   ├── deploy-workflow.md        # Deploy to n8n instance
+│   │   ├── document-workflow.md      # Generate README documentation
+│   │   ├── debug-workflow.md         # Debug failing workflows
+│   │   └── iterate-workflow.md       # Modify existing deployed workflows
+│   │
+│   └── skills/                   # Specialized knowledge libraries
+│       ├── n8n-code-javascript/      # How to write JS in Code nodes (~18,500 tokens)
+│       ├── n8n-workflow-patterns/    # Proven architectural patterns (~18,300 tokens)
+│       └── n8n-mcp-tools-expert/     # How to use n8n MCP tools effectively (~8,300 tokens)
 │
 ├── templates/                    # Input templates for commands
 │   ├── client-notes.md           # Flow B: paste raw client input here
@@ -162,6 +173,7 @@ your-project/
 │
 └── changes/                      # One folder per workflow
     └── {WF-ID}/
+        ├── config.md             # Language preference (written by /init-workflow)
         ├── client-notes.md       # Flow B input: raw client notes
         ├── requirements.md       # Structured spec (input for /plan-workflow)
         ├── plan.md               # Output of /plan-workflow
