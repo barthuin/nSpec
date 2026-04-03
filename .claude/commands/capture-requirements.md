@@ -8,9 +8,17 @@ Equivalent to filling the template + running `/enrich-workflow-spec` in a single
 
 ## Process
 
-### Phase 0 — Skill check
+### Phase 0 — Language & Skills
 
-- Load @base-standards.mdc and @workflow-patterns.mdc
+**Language**: Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
+**Skills**:
+- Load @.claude/specs/base-standards.mdc and @.claude/specs/workflow-patterns.mdc
 - Load skill **`n8n-workflow-patterns`** to identify the right architectural pattern
 
 ### Phase 1 — Read and understand

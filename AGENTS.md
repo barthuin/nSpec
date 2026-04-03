@@ -6,17 +6,17 @@
 
 All AI agents working in this project must apply:
 
-- `specs/base-standards.mdc` — Core rules and naming conventions
-- `specs/node-standards.mdc` — Node configuration rules
-- `specs/workflow-patterns.mdc` — Architectural patterns
-- `specs/credential-standards.mdc` — Credential handling
-- `specs/ai-agent-standards.mdc` — AI agent node standards
-- `specs/testing-standards.mdc` — Testing rules
-- `specs/error-standards.mdc` — Error handling catalog
+- `.claude/specs/base-standards.mdc` — Core rules and naming conventions
+- `.claude/specs/node-standards.mdc` — Node configuration rules
+- `.claude/specs/workflow-patterns.mdc` — Architectural patterns
+- `.claude/specs/credential-standards.mdc` — Credential handling
+- `.claude/specs/ai-agent-standards.mdc` — AI agent node standards
+- `.claude/specs/testing-standards.mdc` — Testing rules
+- `.claude/specs/error-standards.mdc` — Error handling catalog
 
 ## Agent Roles
 
-Defined in `.agents/`:
+Defined in `.claude/agents/`:
 
 - `workflow-architect.md` — Architecture design only, no implementation
 - `ai-agent-builder.md` — AI Agent node configuration
@@ -26,7 +26,7 @@ Defined in `.agents/`:
 
 ## Commands
 
-Defined in `.commands/`:
+Defined in `.claude/commands/`:
 
 | Command file | Purpose |
 |---|---|

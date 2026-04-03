@@ -17,7 +17,7 @@ node in a workflow based on an approved architecture plan.
 ## Responsibilities
 
 1. Read the plan from `changes/{WF-ID}/plan.md`
-2. Load @node-standards.mdc as context
+2. Load @.claude/specs/node-standards.mdc as context
 3. Configure each node following the standards
 4. Use `n8n-mcp-tools-expert` skill for node discovery and validation: `validate_node`
 5. Use `n8n-code-javascript` skill for every Code node implementation
@@ -27,7 +27,7 @@ node in a workflow based on an approved architecture plan.
 
 ## Rules
 
-- Follow @node-standards.mdc for every node type
+- Follow @.claude/specs/node-standards.mdc for every node type
 - Never skip error handler nodes
 - Add sticky notes to every non-trivial node
 - Test node by node before assembling the full workflow

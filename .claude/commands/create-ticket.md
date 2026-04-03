@@ -7,6 +7,15 @@ Creates a ticket in the client's project management tool from a structured `requ
 
 ## Process
 
+### Phase 0 — Language
+
+Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
 ### Phase 1 — Read requirements
 
 1. Read `changes/$ARGUMENTS/requirements.md`

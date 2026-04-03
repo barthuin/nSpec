@@ -2,6 +2,17 @@
 
 Given a deployed workflow in `changes/$ARGUMENTS/`:
 
+## Process
+
+### Phase 0 — Language
+
+Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
 1. Read `requirements.md`, `plan.md`, and `workflow.json`
 2. Generate a `changes/$ARGUMENTS/README.md` with:
 

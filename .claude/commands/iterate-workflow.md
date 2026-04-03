@@ -11,9 +11,16 @@ The file `changes/$ARGUMENTS/iteration-request.md` must exist with:
 
 ## Process
 
-### Phase 0 — Skill check
+### Phase 0 — Language & Skills
 
-Determine which skills to load before proceeding:
+**Language**: Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
+**Skills**: Determine which skills to load before proceeding:
 - Read `changes/$ARGUMENTS/iteration-request.md` — identify which nodes are affected
 - If any affected node is a Code node → load skill **`n8n-code-javascript`**
 - If no Code nodes are involved → do NOT load that skill (saves ~18,500 tokens)
@@ -26,7 +33,7 @@ Determine which skills to load before proceeding:
 3. Read `changes/$ARGUMENTS/requirements.md` (original requirements)
 4. If workflow is deployed: use `n8n_get_workflow` to get the live version
    - Compare live version against `workflow.json` — flag any divergence
-5. Load @base-standards.mdc, @workflow-patterns.mdc, @node-standards.mdc
+5. Load @.claude/specs/base-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/node-standards.mdc
 
 ### Phase 2 — Impact Analysis
 

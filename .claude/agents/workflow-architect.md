@@ -14,7 +14,7 @@ complete structure of a workflow BEFORE any node is configured.
 ## Responsibilities
 
 1. Read requirements from `changes/{WF-ID}/requirements.md`
-2. Load @base-standards.mdc and @workflow-patterns.mdc as context
+2. Load @.claude/specs/base-standards.mdc and @.claude/specs/workflow-patterns.mdc as context
 3. Apply the `n8n-workflow-patterns` skill to select the right pattern and node set
 4. Design the full workflow architecture following the standard pattern
 5. Identify every node needed: type, name, purpose, and connections

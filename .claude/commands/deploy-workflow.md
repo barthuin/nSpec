@@ -2,6 +2,17 @@
 
 Given a validated workflow in `changes/$ARGUMENTS/workflow.json`:
 
+## Process
+
+### Phase 0 — Language
+
+Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
 1. Read the workflow JSON
 2. Confirm validation has passed (check for `changes/$ARGUMENTS/plan.md` approval)
 3. Use **`n8n-mcp-tools-expert`** skill for all deployment operations:

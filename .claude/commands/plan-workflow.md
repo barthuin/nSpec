@@ -2,8 +2,19 @@
 
 Given enriched requirements in `changes/$ARGUMENTS/requirements.md`:
 
+## Process
+
+### Phase 0 — Language
+
+Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
 1. Read the requirements file
-2. Load @base-standards.mdc, @workflow-patterns.mdc, @node-standards.mdc
+2. Load @.claude/specs/base-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/node-standards.mdc
 3. Use the **`n8n-workflow-patterns`** skill to select the right architectural
    pattern and identify standard building blocks
 4. Act as the **workflow-architect** agent

@@ -20,9 +20,14 @@
 
 ## Language Standards
 
-- Node names, variables, expressions, commit messages: **English only**
-- Sticky notes and inline documentation: English preferred, Spanish allowed
-- Specs and plans: English only
+- Node names, variables, expressions, commit messages: **English only** (n8n requirement — never changes)
+- All command responses, specs, plans, sticky notes, and user-facing messages:
+  follow `lang` from `changes/{WF-ID}/config.md`
+  - `lang: es` → Spanish
+  - `lang: en` → English
+  - `lang: pt` → Portuguese
+  - File missing → English (default)
+- Language is set once per workflow by `/init-workflow` and persists across all commands
 
 ## Workflow Architecture
 

@@ -2,9 +2,20 @@
 
 Given a workflow JSON in `changes/$ARGUMENTS/workflow.json`:
 
+## Process
+
+### Phase 0 — Language
+
+Read `changes/$ARGUMENTS/config.md`:
+- `lang: es` → respond in **Spanish** throughout
+- `lang: pt` → respond in **Portuguese** throughout
+- `lang: en` or file missing → respond in **English** (default)
+
+> Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
+
 1. Read the workflow JSON
 2. Read `changes/$ARGUMENTS/plan.md` and `changes/$ARGUMENTS/requirements.md`
-3. Load @base-standards.mdc, @node-standards.mdc, @workflow-patterns.mdc, @error-standards.mdc
+3. Load @.claude/specs/base-standards.mdc, @.claude/specs/node-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/error-standards.mdc
 4. **Skill check — run before continuing:**
    - Search for nodes with `"type": "n8n-nodes-base.code"` in workflow.json
    - If ≥ 1 Code node found → load skill **`n8n-code-javascript`**

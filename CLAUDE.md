@@ -1,6 +1,6 @@
 # nSpec — n8n Spec-Driven Development Framework
 
-@specs/base-standards.mdc
+@.claude/specs/base-standards.mdc
 
 ## Flujo A — Equipo (PO escribe los requirements)
 
@@ -92,6 +92,7 @@ no contaminan el coste de las fases siguientes.
 ```
 changes/
 └── {WF-ID}/              # Ej: WF-001 o PROJ-42-lead-qualify
+    ├── config.md         # Preferencia de idioma: lang: es | en | pt  (escrito por /init-workflow)
     ├── client-notes.md   # Flujo B: notas crudas del cliente (input de /capture-requirements)
     ├── requirements.md   # Flujo A+B: spec estructurada (input de /plan-workflow)
     ├── plan.md           # Output de /plan-workflow

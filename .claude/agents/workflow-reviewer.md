@@ -18,7 +18,7 @@ identifying issues before deployment.
 
 1. Read the workflow JSON from `changes/{WF-ID}/workflow.json`
 2. Read the original plan and requirements for context
-3. Load @base-standards.mdc, @node-standards.mdc, @workflow-patterns.mdc, @error-standards.mdc
+3. Load @.claude/specs/base-standards.mdc, @.claude/specs/node-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/error-standards.mdc
 4. Evaluate the workflow from four perspectives:
    - **Correctness**: Does it actually solve the requirements?
    - **Standards compliance**: Does it follow all nSpec rules?
