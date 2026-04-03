@@ -35,7 +35,15 @@ cp -r nSpec/{CLAUDE.md,AGENTS.md,.claude,templates,changes} your-project/
 
 Or use the repo directly as your working directory.
 
-### 2. Pick your flow
+### 2. Configure Claude Code *(optional, one-time)*
+
+```
+/init-config
+```
+
+Claude will ask if you want to use one or two models, and handle the full setup automatically. Skip this step if you're using a different agent (Cursor, Copilot, etc.) or just want the default single-model setup.
+
+### 3. Pick your flow
 
 nSpec has two entry points depending on your context:
 
@@ -78,7 +86,7 @@ Creates a Jira or Notion ticket from `requirements.md` and updates the file with
 
 ---
 
-### 3. Run the development pipeline
+### 4. Run the development pipeline
 
 From here both flows converge:
 
@@ -190,6 +198,7 @@ your-project/
 
 | Command | Input | What it does |
 |---------|-------|-------------|
+| `/init-config` | — | One-time Claude Code model setup (single or dual model, installs ccr if needed) |
 | `/init-workflow {WF-ID}` | — | Creates `changes/{WF-ID}/` and copies the right template |
 
 ### Flow A — Team
@@ -233,6 +242,31 @@ Agents are specialized AI roles. Commands activate them automatically — you do
 | `node-developer` | Implements every node per the approved plan | Design decisions |
 | `integration-specialist` | Maps external service connections and auth | Implementation |
 | `workflow-reviewer` | Reviews JSON for issues before deploy | Modify files |
+
+---
+
+## Model Configuration *(optional, Claude Code only)*
+
+Run `/init-config` and Claude will guide you through the full setup interactively.
+
+By default all commands run in a single session with one model. Optionally you can assign a second, lighter model to structured tasks — each model runs in its own session.
+
+### Command types
+
+| Type | Commands | Recommended model |
+|------|----------|-------------------|
+| Reasoning / code generation | `capture-requirements`, `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` | Primary (e.g. Sonnet) |
+| Structured / automation | `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` | Secondary (e.g. Haiku or Flash) |
+
+### Modes
+
+| Mode | Sessions | Setup |
+|------|----------|-------|
+| Single model | Single session, use `/clear` between phases | None — default |
+| Sonnet + Haiku | Multiple sessions via aliases | `/init-config` → option B → Haiku |
+| Sonnet + Gemini 2.5 Flash | Multiple sessions via aliases | `/init-config` → option B → Gemini, installs [`claude-code-router`](https://github.com/musistudio/claude-code-router) |
+
+Use `nspec` for reasoning commands and `nspec-fast -p "/<command> {WF-ID}"` for structured ones.
 
 ---
 

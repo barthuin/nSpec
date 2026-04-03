@@ -8,6 +8,13 @@ the appropriate template files.
 
 ## Process
 
+### Step 0 — Start ccr if configured
+
+Run silently. No output to the user:
+```bash
+command -v ccr &>/dev/null && (ccr status 2>/dev/null | grep -qi "running" || ccr start)
+```
+
 ### Step 1 — Validate the ID
 
 1. Check that `$ARGUMENTS` is provided. If not, stop and respond:

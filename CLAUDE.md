@@ -2,6 +2,15 @@
 
 @.claude/specs/base-standards.mdc
 
+## Setup inicial (solo Claude Code, solo una vez)
+
+```
+/init-config
+```
+
+Configura el modelo o modelos a usar. Solo necesario la primera vez.
+Ver sección [Configuración de modelos](#configuración-de-modelos-opcional) para detalles.
+
 ## Flujo A — Equipo (PO escribe los requirements)
 
 ```
@@ -67,6 +76,59 @@ client-notes.md → /capture-requirements → /create-ticket → /plan-workflow 
 | `n8n-code-javascript` | **Solo si el workflow tiene Code nodes** | ~18,500 tokens |
 | `n8n-workflow-patterns` | Al diseñar arquitectura (plan, capture) | ~18,300 tokens |
 | `n8n-mcp-tools-expert` | Siempre en build, validate, deploy, review | ~8,300 tokens |
+
+## Configuración de modelos (opcional)
+
+Ejecuta `/init-config` para configurar esto de forma interactiva.
+La tabla y los modos a continuación son la referencia de lo que ese comando configura.
+
+Por defecto todos los comandos usan el modelo activo de la sesión.
+Opcionalmente puedes asignar un segundo modelo más ligero a las tareas estructuradas.
+
+### Tipo de tarea por comando
+
+| Comando | Tipo | Modelo |
+|---------|------|--------|
+| `/capture-requirements` | Razonamiento sobre input ambiguo | principal |
+| `/plan-workflow` | Diseño arquitectónico | principal |
+| `/build-workflow` | Generación de código | principal |
+| `/review-workflow` | Juicio de calidad | principal |
+| `/debug-workflow` | Análisis de causa raíz | principal |
+| `/iterate-workflow` | Análisis de impacto | principal |
+| `/enrich-workflow-spec` | Completitud estructurada | secundario |
+| `/create-ticket` | Formateo de documento | secundario |
+| `/validate-workflow` | Verificación de checklist | secundario |
+| `/deploy-workflow` | Ejecución de herramientas | secundario |
+| `/document-workflow` | Síntesis de artefactos | secundario |
+
+### Modos de uso
+
+**Modo 1 — Un solo modelo, sesión única (por defecto, sin setup)**
+Sin configuración adicional. Todos los comandos usan el modelo activo en la sesión.
+Usa `/clear` entre fases para resetear el contexto.
+
+**Modo 2 — Sonnet + Haiku, múltiples sesiones (sin gateway, solo Anthropic)**
+Cada alias abre una sesión separada con el modelo correspondiente.
+```bash
+# ~/.zshrc
+alias nspec="claude --model claude-sonnet-4-6"
+alias nspec-fast="claude --model claude-haiku-4-5-20251001"
+```
+
+**Modo 3 — Sonnet + [cualquier modelo externo], múltiples sesiones via claude-code-router**
+Cada alias abre una sesión separada. Requiere [`claude-code-router`](https://github.com/musistudio/claude-code-router) corriendo como proxy local.
+```bash
+npm install -g @musistudio/claude-code-router
+ccr start && eval "$(ccr activate)"
+```
+```bash
+# ~/.zshrc — sustituye <segundo-modelo> por el que elijas (ej: gemini-2.5-flash)
+alias nspec="ANTHROPIC_MODEL=claude-sonnet-4-6 claude"
+alias nspec-fast="ANTHROPIC_MODEL=<segundo-modelo> claude"
+```
+
+Comandos de tipo `principal` → `nspec`
+Comandos de tipo `secundario` → `nspec-fast -p "/<comando> {WF-ID}"`
 
 ## Estrategia de contexto (optimización de tokens)
 
