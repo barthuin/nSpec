@@ -14,7 +14,9 @@ requirements.md → /enrich-workflow-spec → /plan-workflow → /build-workflow
 |------|---------|-------|--------|
 | 1 | `/enrich-workflow-spec {WF-ID}` | `changes/{WF-ID}/requirements.md` | requirements enriquecidos |
 | 2 | `/plan-workflow {WF-ID}` | requirements enriquecidos | `changes/{WF-ID}/plan.md` |
+| — | `/clear` | — | reset de contexto (descarga skills de planning) |
 | 3 | `/build-workflow {WF-ID}` | plan aprobado | `changes/{WF-ID}/workflow.json` |
+| — | `/clear` | — | reset de contexto (descarga skills de build) |
 | 4 | `/validate-workflow {WF-ID}` | workflow.json | validation report |
 | 5 | `/review-workflow {WF-ID}` | workflow.json | review with fixes |
 | 6 | `/deploy-workflow {WF-ID}` | validated workflow.json | deployed workflow URL |
@@ -33,7 +35,9 @@ client-notes.md → /capture-requirements → /create-ticket → /plan-workflow 
 | 1 | `/capture-requirements {WF-ID}` | `changes/{WF-ID}/client-notes.md` | `changes/{WF-ID}/requirements.md` |
 | 2 | `/create-ticket {WF-ID}` | requirements.md | ticket en Jira / Notion + ID en requirements.md |
 | 3 | `/plan-workflow {WF-ID}` | requirements.md | `changes/{WF-ID}/plan.md` |
+| — | `/clear` | — | reset de contexto (descarga skills de planning) |
 | 4 | `/build-workflow {WF-ID}` | plan aprobado | `changes/{WF-ID}/workflow.json` |
+| — | `/clear` | — | reset de contexto (descarga skills de build) |
 | 5 | `/validate-workflow {WF-ID}` | workflow.json | validation report |
 | 6 | `/review-workflow {WF-ID}` | workflow.json | review with fixes |
 | 7 | `/deploy-workflow {WF-ID}` | validated workflow.json | deployed workflow URL |
@@ -64,28 +68,30 @@ client-notes.md → /capture-requirements → /create-ticket → /plan-workflow 
 | `n8n-workflow-patterns` | Al diseñar arquitectura (plan, capture) | ~18,300 tokens |
 | `n8n-mcp-tools-expert` | Siempre en build, validate, deploy, review | ~8,300 tokens |
 
-## Estrategia de sesiones (optimización de tokens)
+## Estrategia de contexto (optimización de tokens)
 
-Dividir el trabajo en 3 sesiones separadas para evitar que los skills pesados
-acumulen coste en fases que no los necesitan:
+Usar `/clear` entre fases para resetear el contexto sin salir de Claude Code.
+El estado persiste en disco (`changes/{WF-ID}/`), no en la conversación.
 
 ```
-Sesión 1 — Spec & Plan      (~15,000 tokens)
+Fase 1 — Spec & Plan      (~15,000 tokens)
   /capture-requirements  →  /create-ticket  →  /plan-workflow
+  → /clear
 
-Sesión 2 — Build            (~100,000 tokens, la más pesada)
+Fase 2 — Build            (~100,000 tokens, la más pesada)
   /build-workflow
+  → /clear
 
-Sesión 3 — QA & Deploy      (~60,000 tokens)
+Fase 3 — QA & Deploy      (~60,000 tokens)
   /validate-workflow  →  /review-workflow  →  /deploy-workflow  →  /document-workflow
 ```
 
 **Por qué funciona:** `/build-workflow` carga los dos skills más pesados
 (`n8n-mcp-tools-expert` + opcionalmente `n8n-code-javascript`) y genera decenas
-de turns con MCP. Al terminar en sesión propia, esos ~27,000 tokens de skills
-no contaminan el coste de las fases siguientes.
+de turns con MCP. El `/clear` descarga esos ~27,000 tokens de skills antes de
+pasar a QA, donde ya no se necesitan.
 
-**Ahorro estimado:** ~30,000–50,000 tokens en sesión 3 respecto a una sesión única.
+**Ahorro estimado:** ~30,000–50,000 tokens en fase 3 respecto a no hacer `/clear`.
 
 ## Estructura de changes/
 
