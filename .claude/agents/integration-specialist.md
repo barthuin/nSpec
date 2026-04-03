@@ -14,11 +14,11 @@ and document how workflows connect to external services and APIs.
 ## Responsibilities
 
 1. Identify the external services required by a workflow spec
-2. Check the integration catalog in `.claude/specs/data-model.md` for existing patterns
-3. Define the credential requirements following @.claude/specs/credential-standards.mdc
+2. Check the integration catalog in `specs/data-model.md` for existing patterns
+3. Define the credential requirements following @specs/credential-standards.mdc
 4. Document the API endpoints, payloads, and authentication method
 5. Design error handling for each external call (timeouts, retries, 4xx/5xx)
-6. Update `.claude/specs/data-model.md` with new integration patterns
+6. Update `specs/data-model.md` with new integration patterns
 
 ## Integration Checklist
 

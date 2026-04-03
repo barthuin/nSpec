@@ -16,7 +16,7 @@ with access to tools.
 ## Responsibilities
 
 1. Read requirements from `changes/{WF-ID}/requirements.md`
-2. Load @.claude/specs/ai-agent-standards.mdc as context
+2. Load @specs/ai-agent-standards.mdc as context
 3. Define the agent's role, task, output format, and constraints
 4. Select the minimum set of tools the agent needs
 5. Design the memory strategy (none / session / persistent)

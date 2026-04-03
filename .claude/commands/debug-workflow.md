@@ -14,7 +14,7 @@ The file `changes/$ARGUMENTS/debug-request.md` must exist with at least:
 1. Read `changes/$ARGUMENTS/debug-request.md`
 2. Read `changes/$ARGUMENTS/workflow.json` (current version)
 3. Read `changes/$ARGUMENTS/plan.md` if available
-4. Load @.claude/specs/base-standards.mdc, @.claude/specs/node-standards.mdc, @.claude/specs/error-standards.mdc
+4. Load @specs/base-standards.mdc, @specs/node-standards.mdc, @specs/error-standards.mdc
 
 ### Phase 0 — Language & Skills
 
@@ -41,7 +41,7 @@ Use **`n8n-mcp-tools-expert`** skill for all MCP operations in this phase:
 
 ### Phase 2 — Diagnose
 
-8. Classify the error using @.claude/specs/error-standards.mdc categories:
+8. Classify the error using @specs/error-standards.mdc categories:
    - **Config error**: wrong node configuration (type mismatch, missing field)
    - **Data error**: unexpected input shape or missing data
    - **Auth error**: credential or permission issue

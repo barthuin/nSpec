@@ -14,7 +14,7 @@ Read `changes/$ARGUMENTS/config.md`:
 > Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
 
 1. Read the workflow JSON
-2. Load @.claude/specs/base-standards.mdc and @.claude/specs/node-standards.mdc
+2. Load @specs/base-standards.mdc and @specs/node-standards.mdc
 3. Use **`n8n-mcp-tools-expert`** skill → run `n8n_validate_workflow` on the JSON
 4. Check compliance against standards:
    - [ ] Workflow name follows naming convention

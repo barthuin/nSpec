@@ -18,7 +18,7 @@ Equivalent to filling the template + running `/enrich-workflow-spec` in a single
 > Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
 
 **Skills**:
-- Load @.claude/specs/base-standards.mdc and @.claude/specs/workflow-patterns.mdc
+- Load @specs/base-standards.mdc and @specs/workflow-patterns.mdc
 - Load skill **`n8n-workflow-patterns`** to identify the right architectural pattern
 
 ### Phase 1 — Read and understand

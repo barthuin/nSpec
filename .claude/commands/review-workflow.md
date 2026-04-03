@@ -15,7 +15,7 @@ Read `changes/$ARGUMENTS/config.md`:
 
 1. Read the workflow JSON
 2. Read `changes/$ARGUMENTS/plan.md` and `changes/$ARGUMENTS/requirements.md`
-3. Load @.claude/specs/base-standards.mdc, @.claude/specs/node-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/error-standards.mdc
+3. Load @specs/base-standards.mdc, @specs/node-standards.mdc, @specs/workflow-patterns.mdc, @specs/error-standards.mdc
 4. **Skill check — run before continuing:**
    - Search for nodes with `"type": "n8n-nodes-base.code"` in workflow.json
    - If ≥ 1 Code node found → load skill **`n8n-code-javascript`**

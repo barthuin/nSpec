@@ -30,7 +30,7 @@ nSpec is a **Spec-Driven AI Workflow Orchestration Framework**. It enables devel
 
 ```bash
 git clone https://github.com/barthuin/nSpec.git
-cp -r nSpec/{CLAUDE.md,AGENTS.md,.claude,templates,changes} your-project/
+cp -r nSpec/{CLAUDE.md,AGENTS.md,specs,.claude,templates,changes} your-project/
 ```
 
 Or use the repo directly as your working directory.
@@ -139,16 +139,16 @@ your-project/
 ├── CLAUDE.md                     # Entry point for Claude Code — loads all specs
 ├── AGENTS.md                     # Entry point for other AI tools (Cursor, Copilot, etc.)
 │
+├── specs/                        # Standards — shared by all agents (single source of truth)
+│   ├── base-standards.mdc        # Core rules and naming conventions
+│   ├── node-standards.mdc        # Per-node configuration rules
+│   ├── workflow-patterns.mdc     # Architectural patterns (webhook, schedule, AI agent...)
+│   ├── credential-standards.mdc  # How to handle credentials safely
+│   ├── ai-agent-standards.mdc    # Rules for AI Agent nodes
+│   ├── testing-standards.mdc     # Test scenario structure and checklist
+│   └── error-standards.mdc       # Error categories, retry policy, notification format
+│
 ├── .claude/                      # Claude Code configuration (auto-discovered)
-│   ├── specs/                    # Standards (single source of truth)
-│   │   ├── base-standards.mdc        # Core rules and naming conventions
-│   │   ├── node-standards.mdc        # Per-node configuration rules
-│   │   ├── workflow-patterns.mdc     # Architectural patterns (webhook, schedule, AI agent...)
-│   │   ├── credential-standards.mdc  # How to handle credentials safely
-│   │   ├── ai-agent-standards.mdc    # Rules for AI Agent nodes
-│   │   ├── testing-standards.mdc     # Test scenario structure and checklist
-│   │   └── error-standards.mdc       # Error categories, retry policy, notification format
-│   │
 │   ├── agents/                   # AI agent role definitions
 │   │   ├── workflow-architect.md     # Designs architecture — never implements
 │   │   ├── ai-agent-builder.md       # Configures AI Agent nodes

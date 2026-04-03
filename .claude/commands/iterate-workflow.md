@@ -33,7 +33,7 @@ The file `changes/$ARGUMENTS/iteration-request.md` must exist with:
 3. Read `changes/$ARGUMENTS/requirements.md` (original requirements)
 4. If workflow is deployed: use `n8n_get_workflow` to get the live version
    - Compare live version against `workflow.json` — flag any divergence
-5. Load @.claude/specs/base-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/node-standards.mdc
+5. Load @specs/base-standards.mdc, @specs/workflow-patterns.mdc, @specs/node-standards.mdc
 
 ### Phase 2 — Impact Analysis
 

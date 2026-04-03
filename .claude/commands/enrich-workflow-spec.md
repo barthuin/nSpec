@@ -14,7 +14,7 @@ Read `changes/$ARGUMENTS/config.md`:
 > Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
 
 1. Read the requirements file
-2. Load @.claude/specs/base-standards.mdc and @.claude/specs/workflow-patterns.mdc as context
+2. Load @specs/base-standards.mdc and @specs/workflow-patterns.mdc as context
 3. Assess completeness — a good spec must include:
    - Trigger type and origin
    - Input data description

@@ -1,6 +1,6 @@
 # nSpec — n8n Spec-Driven Development Framework
 
-@.claude/specs/base-standards.mdc
+@specs/base-standards.mdc
 
 ## Setup inicial (solo Claude Code, solo una vez)
 

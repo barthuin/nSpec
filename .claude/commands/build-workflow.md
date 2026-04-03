@@ -14,7 +14,7 @@ Read `changes/$ARGUMENTS/config.md`:
 > Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
 
 1. Read the plan file
-2. Load @.claude/specs/node-standards.mdc and @.claude/specs/credential-standards.mdc as context
+2. Load @specs/node-standards.mdc and @specs/credential-standards.mdc as context
 3. **Skill check — run before continuing:**
    - Count how many `code` type nodes appear in the plan
    - If ≥ 1 Code node → load skill **`n8n-code-javascript`**
@@ -23,7 +23,7 @@ Read `changes/$ARGUMENTS/config.md`:
 4. Act as the **node-developer** agent
 5. For each node in the plan:
    a. Use **`n8n-mcp-tools-expert`** skill → `search_nodes` to confirm the correct node type
-   b. Configure the node following @.claude/specs/node-standards.mdc
+   b. Configure the node following @specs/node-standards.mdc
    c. Use **`n8n-mcp-tools-expert`** skill → `validate_node` to validate
    d. For Code nodes: use **`n8n-code-javascript`** skill for implementation
 6. Search for similar templates: `search_templates`

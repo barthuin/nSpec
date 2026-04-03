@@ -14,7 +14,7 @@ Read `changes/$ARGUMENTS/config.md`:
 > Exception: node names, variables, expressions, code, and JSON keys always remain in English (n8n requirement).
 
 1. Read the requirements file
-2. Load @.claude/specs/base-standards.mdc, @.claude/specs/workflow-patterns.mdc, @.claude/specs/node-standards.mdc
+2. Load @specs/base-standards.mdc, @specs/workflow-patterns.mdc, @specs/node-standards.mdc
 3. Use the **`n8n-workflow-patterns`** skill to select the right architectural
    pattern and identify standard building blocks
 4. Act as the **workflow-architect** agent
