@@ -23,6 +23,19 @@ Read `changes/$ARGUMENTS/config.md`:
 4. Act as the **node-developer** agent
 5. For each node in the plan:
    a. Use **`n8n-mcp-tools-expert`** skill → `search_nodes` to confirm the correct node type
+      - For any `httpRequest` node calling a named external service: also run
+        `search_nodes(query: "<service-name>", source: "community")`
+      - If a community node exists and the plan didn't consider it:
+        **stop and surface the alternative** before implementing:
+        ```
+        ⚠️ Alternativa encontrada: <package-name> (<npmDownloads> descargas)
+        El plan usa httpRequest para <service>. Existe un nodo nativo.
+        Ventaja: gestión de credenciales integrada, operaciones pre-mapeadas.
+        Instalación: Settings → Community Nodes → Install Node → <package-name>
+
+        ¿Usamos el nodo nativo o seguimos con httpRequest?
+        ```
+        Wait for user confirmation before continuing.
    b. Configure the node following @specs/node-standards.mdc
    c. Use **`n8n-mcp-tools-expert`** skill → `validate_node` to validate
    d. For Code nodes: use **`n8n-code-javascript`** skill for implementation

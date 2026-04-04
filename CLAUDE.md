@@ -89,12 +89,12 @@ Opcionalmente puedes asignar un segundo modelo más ligero a las tareas estructu
 
 | Comando | Tipo | Modelo |
 |---------|------|--------|
-| `/capture-requirements` | Razonamiento sobre input ambiguo | principal |
 | `/plan-workflow` | Diseño arquitectónico | principal |
 | `/build-workflow` | Generación de código | principal |
 | `/review-workflow` | Juicio de calidad | principal |
 | `/debug-workflow` | Análisis de causa raíz | principal |
 | `/iterate-workflow` | Análisis de impacto | principal |
+| `/capture-requirements` | Estructuración de notas de cliente | secundario |
 | `/enrich-workflow-spec` | Completitud estructurada | secundario |
 | `/create-ticket` | Formateo de documento | secundario |
 | `/validate-workflow` | Verificación de checklist | secundario |
@@ -107,28 +107,80 @@ Opcionalmente puedes asignar un segundo modelo más ligero a las tareas estructu
 Sin configuración adicional. Todos los comandos usan el modelo activo en la sesión.
 Usa `/clear` entre fases para resetear el contexto.
 
-**Modo 2 — Sonnet + Haiku, múltiples sesiones (sin gateway, solo Anthropic)**
-Cada alias abre una sesión separada con el modelo correspondiente.
+**Modo 2 — Sonnet 4.6 + Haiku, múltiples sesiones (solo Anthropic, sin gateway)**
+Cada alias abre una sesión separada con el modelo correspondiente. No requiere servicios externos.
 ```bash
 # ~/.zshrc
 alias nspec="claude --model claude-sonnet-4-6"
 alias nspec-fast="claude --model claude-haiku-4-5-20251001"
 ```
 
-**Modo 3 — Sonnet + [cualquier modelo externo], múltiples sesiones via claude-code-router**
-Cada alias abre una sesión separada. Requiere [`claude-code-router`](https://github.com/musistudio/claude-code-router) corriendo como proxy local.
+**Modo 3 — Sonnet 4.6 + Gemini Flash, múltiples sesiones via claude-code-router**
+Sonnet para razonamiento, Gemini Flash para tareas estructuradas. Requiere API key de Gemini y `claude-code-router` como proxy local.
 ```bash
 npm install -g @musistudio/claude-code-router
 ccr start && eval "$(ccr activate)"
 ```
 ```bash
-# ~/.zshrc — sustituye <segundo-modelo> por el que elijas (ej: gemini-2.5-flash)
+# ~/.zshrc
 alias nspec="ANTHROPIC_MODEL=claude-sonnet-4-6 claude"
-alias nspec-fast="ANTHROPIC_MODEL=<segundo-modelo> claude"
+alias nspec-fast="ANTHROPIC_MODEL=gemini-2.5-flash claude"
 ```
 
-Comandos de tipo `principal` → `nspec`
-Comandos de tipo `secundario` → `nspec-fast -p "/<comando> {WF-ID}"`
+**Modo 4 — DeepSeek-R1 + Gemini Flash, múltiples sesiones via claude-code-router**
+DeepSeek-R1 para razonamiento complejo, Gemini Flash para tareas estructuradas. Requiere API keys de DeepSeek y Gemini, más `claude-code-router` como proxy local.
+```bash
+npm install -g @musistudio/claude-code-router
+ccr start && eval "$(ccr activate)"
+```
+```bash
+# ~/.zshrc
+alias nspec="ANTHROPIC_MODEL=deepseek-reasoner claude"
+alias nspec-fast="ANTHROPIC_MODEL=gemini-2.5-flash claude"
+```
+
+**Modo 5 — Modelos a elección del usuario, múltiples sesiones via claude-code-router**
+El usuario elige libremente `nspec` y `nspec-fast`. Requiere `claude-code-router` si algún modelo es externo.
+```bash
+# ~/.zshrc — sustituye <modelo-principal> y <modelo-secundario>
+alias nspec="ANTHROPIC_MODEL=<modelo-principal> claude"
+alias nspec-fast="ANTHROPIC_MODEL=<modelo-secundario> claude"
+```
+
+### Cómo usar los aliases (modos 2–5)
+
+> **Nunca abras Claude con `claude` directamente** en modos 2–5 — ignora los aliases y lanza Sonnet por defecto.
+
+| Alias | Para qué flujos | Comandos |
+|-------|----------------|---------|
+| `nspec` | Razonamiento y generación de código | `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` |
+| `nspec-fast` | Documentales y de verificación | `capture-requirements`, `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` |
+
+```bash
+# Flujo de razonamiento — abre sesión interactiva
+nspec
+
+# Flujo documental/verificación — ejecuta en una sola pasada
+nspec-fast -p "/validate-workflow WF-001"
+nspec-fast -p "/document-workflow WF-001"
+```
+
+Si la alias no responde, ejecuta `source ~/.zshrc` primero. Las terminales nuevas la cargan automáticamente.
+
+### Setup de emergencia (rate limit de Anthropic)
+
+Si llegas al rate limit no puedes ejecutar `/init-config` — requiere Claude.
+Usa el script de gestión de modos — no requiere Claude:
+
+```bash
+bash scripts/nspec-setup.sh                     # muestra el modo actual, elige 4 para DeepSeek-R1
+source ~/.zshrc && eval "$(ccr activate)"       # activa en la terminal actual
+nspec                                            # retoma el workflow
+```
+
+Detecta qué ya está configurado y solo ejecuta lo que falta. Úsalo también para cambiar de modo en cualquier momento.
+
+API keys: [DeepSeek](https://platform.deepseek.com/api_keys) · [Gemini](https://aistudio.google.com/apikey) (tier gratuito suficiente)
 
 ## Estrategia de contexto (optimización de tokens)
 

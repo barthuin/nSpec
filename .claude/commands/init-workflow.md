@@ -38,7 +38,35 @@ Map the answer to a code: `A` → `es` · `B` → `en` · `C` → `pt`.
 Use this language for all subsequent steps in this command and for all future
 commands run on this workflow ID.
 
-### Step 3 — Choose the flow
+### Step 3 — Choose model mode
+
+Run silently:
+```bash
+grep -q "nspec-fast" ~/.zshrc && echo "DUAL" || echo "SINGLE"
+```
+
+If `SINGLE`: skip this step. `model_mode` will be `single`.
+
+If `DUAL`, ask in the chosen language:
+
+> **(es)** ¿Cómo quieres ejecutar los comandos de este workflow?
+> **(en)** How do you want to run commands for this workflow?
+> **(pt)** Como quer executar os comandos deste workflow?
+>
+> **A — Sesión única / Single session / Sessão única**
+> Todos los comandos en esta sesión con Sonnet. Más simple.
+> Usa `/clear` entre fases para liberar contexto.
+>
+> **B — Sesiones separadas / Dual sessions / Sessões separadas**
+> Comandos de razonamiento con `nspec` (Sonnet).
+> Comandos estructurados con `nspec-fast` (Haiku / Gemini Flash).
+> Ahorra coste en validate, deploy y document.
+
+Map: `A` → `model_mode: single` · `B` → `model_mode: dual`
+
+---
+
+### Step 4 — Choose the flow
 
 Ask in the chosen language which flow applies:
 
@@ -54,14 +82,16 @@ Ask in the chosen language which flow applies:
 > requirements yourself.
 > → Copies `templates/client-notes.md` → `changes/$ARGUMENTS/client-notes.md`
 
-### Step 4 — Create folder and config
+### Step 5 — Create folder and config
 
 3. Create the directory `changes/$ARGUMENTS/`
 4. Create `changes/$ARGUMENTS/config.md` with:
    ```
    lang: {code}
+   model_mode: {mode}
    ```
-   where `{code}` is `es`, `en`, or `pt` from Step 2.
+   where `{code}` is `es`, `en`, or `pt` from Step 2,
+   and `{mode}` is `single` or `dual` from Step 3.
 5. Based on the chosen flow:
 
    **Flow A:**
@@ -70,7 +100,7 @@ Ask in the chosen language which flow applies:
    **Flow B:**
    - Copy `templates/client-notes.md` → `changes/$ARGUMENTS/client-notes.md`
 
-### Step 5 — Confirm and guide
+### Step 6 — Confirm and guide
 
 6. Confirm what was created and tell the user the next step.
    Use the chosen language:

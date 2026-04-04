@@ -18,8 +18,14 @@ Read `changes/$ARGUMENTS/config.md`:
 3. Use the **`n8n-workflow-patterns`** skill to select the right architectural
    pattern and identify standard building blocks
 4. Act as the **workflow-architect** agent
-5. Design the complete workflow architecture
-6. Save the plan to `changes/$ARGUMENTS/plan.md`
+5. **Community node check** — for each external service mentioned in the requirements:
+   - Run `search_nodes(query: "<service>", source: "community")`
+   - If a verified or widely-used community node exists, **use it in the plan** instead of `httpRequest`
+   - In the node list, mark community nodes with `[community]` and include the package name
+   - In the Credentials section, add installation instructions for any community node:
+     `Settings → Community Nodes → Install Node → <package-name>`
+6. Design the complete workflow architecture
+7. Save the plan to `changes/$ARGUMENTS/plan.md`
 
 The plan must include:
 - [ ] Trigger type and configuration

@@ -100,8 +100,8 @@ to structured tasks to reduce cost. Configure this in your agent's settings.
 
 | Type | Commands |
 |------|----------|
-| **Primary model** — reasoning, code generation | `capture-requirements`, `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` |
-| **Secondary model** — structured, automation | `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` |
+| **Primary model** — reasoning, code generation | `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` |
+| **Secondary model** — structured, documentary | `capture-requirements`, `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` |
 
 ### Modes
 
@@ -110,10 +110,37 @@ All commands use the same model. No configuration needed.
 
 **Dual model**
 Configure your agent to use two models:
-- **Primary**: a capable reasoning model (e.g. Claude Sonnet, GPT-4o, Gemini Pro)
+- **Primary**: a capable reasoning model (e.g. Claude Sonnet, GPT-4o, Gemini Pro, DeepSeek-R1)
 - **Secondary**: a faster/cheaper model (e.g. Claude Haiku, GPT-4o mini, Gemini Flash)
 
+Always use the primary model for reasoning commands and the secondary for structured/documentary ones.
 Refer to your agent's documentation for multi-model or per-task model routing.
+
+---
+
+## Context Strategy (token optimization)
+
+Workflows are built in three phases with distinct token budgets. Reset context between phases
+to avoid carrying skills and history that are no longer needed.
+
+```
+Phase 1 — Spec & Plan      (~15,000 tokens)
+  capture-requirements  →  create-ticket  →  plan-workflow
+  → reset context
+
+Phase 2 — Build            (~100,000 tokens, heaviest)
+  build-workflow
+  → reset context
+
+Phase 3 — QA & Deploy      (~60,000 tokens)
+  validate-workflow  →  review-workflow  →  deploy-workflow  →  document-workflow
+```
+
+**Why it matters:** `build-workflow` loads the two heaviest skills (`n8n-mcp-tools-expert`
++ optionally `n8n-code-javascript`, ~27k tokens combined) and generates many tool calls.
+Resetting context before Phase 3 unloads those skills, saving ~30,000–50,000 tokens.
+
+State persists on disk in `changes/{WF-ID}/` — resetting context does not lose any work.
 
 ---
 

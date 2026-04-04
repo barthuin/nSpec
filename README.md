@@ -43,6 +43,12 @@ Or use the repo directly as your working directory.
 
 Claude will ask if you want to use one or two models, and handle the full setup automatically. Skip this step if you're using a different agent (Cursor, Copilot, etc.) or just want the default single-model setup.
 
+Alternatively, use the shell script — works without Claude, and lets you switch modes at any time:
+
+```bash
+bash scripts/nspec-setup.sh
+```
+
 ### 3. Pick your flow
 
 nSpec has two entry points depending on your context:
@@ -253,20 +259,58 @@ By default all commands run in a single session with one model. Optionally you c
 
 ### Command types
 
-| Type | Commands | Recommended model |
-|------|----------|-------------------|
-| Reasoning / code generation | `capture-requirements`, `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` | Primary (e.g. Sonnet) |
-| Structured / automation | `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` | Secondary (e.g. Haiku or Flash) |
+| Type | Commands | Alias |
+|------|----------|-------|
+| Reasoning / code generation | `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` | `nspec` |
+| Structured / documentary | `capture-requirements`, `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` | `nspec-fast` |
 
 ### Modes
 
-| Mode | Sessions | Setup |
-|------|----------|-------|
-| Single model | Single session, use `/clear` between phases | None — default |
-| Sonnet + Haiku | Multiple sessions via aliases | `/init-config` → option B → Haiku |
-| Sonnet + Gemini 2.5 Flash | Multiple sessions via aliases | `/init-config` → option B → Gemini, installs [`claude-code-router`](https://github.com/musistudio/claude-code-router) |
+| Mode | Models | Setup required |
+|------|--------|---------------|
+| 1 — Single model | Active session model | None — default |
+| 2 — Sonnet + Haiku | Both Anthropic, no gateway | `/init-config` → two models → Haiku |
+| 3 — Sonnet + Gemini Flash | Gemini API key + [`ccr`](https://github.com/musistudio/claude-code-router) | `/init-config` → two models → Gemini Flash |
+| 4 — DeepSeek-R1 + Gemini Flash | DeepSeek + Gemini API keys + `ccr` | `/init-config` → two models → DeepSeek-R1 |
+| 5 — Custom | Any models | `/init-config` → two models → Custom |
 
-Use `nspec` for reasoning commands and `nspec-fast -p "/<command> {WF-ID}"` for structured ones.
+### Using the aliases (modes 2–5)
+
+> **Never open Claude with `claude` directly** in modes 2–5 — it ignores aliases and defaults to Sonnet.
+
+| Alias | For which flows | Commands |
+|-------|----------------|---------|
+| `nspec` | Reasoning & code generation | `plan-workflow`, `build-workflow`, `review-workflow`, `debug-workflow`, `iterate-workflow` |
+| `nspec-fast` | Structured & documentary | `capture-requirements`, `enrich-workflow-spec`, `create-ticket`, `validate-workflow`, `deploy-workflow`, `document-workflow` |
+
+```bash
+# Reasoning flow — opens an interactive session
+nspec
+
+# Documentary/verification flow — runs in a single pass
+nspec-fast -p "/validate-workflow WF-001"
+nspec-fast -p "/document-workflow WF-001"
+```
+
+If the alias is not found, run `source ~/.zshrc` first. New terminals load it automatically.
+
+### Rate limit — emergency setup
+
+If you hit Anthropic rate limits you cannot run `/init-config` (it requires Claude).
+Use the setup script instead — no Claude required:
+
+```bash
+bash scripts/nspec-setup.sh                     # shows current mode, pick 4 for DeepSeek-R1
+source ~/.zshrc && eval "$(ccr activate)"       # activate in current terminal
+nspec                                            # resume your workflow
+```
+
+The script detects what's already configured (ccr, config, aliases) and only executes missing steps.
+Run it again any time to switch between modes.
+
+API keys needed: [DeepSeek](https://platform.deepseek.com/api_keys) · [Gemini](https://aistudio.google.com/apikey) (free tier sufficient)
+
+Your workflow state in `changes/{WF-ID}/` is untouched — resume exactly where you left off.
 
 ---
 

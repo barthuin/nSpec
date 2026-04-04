@@ -6,12 +6,30 @@
 - Every non-trivial node must have a sticky note explaining its purpose
 - Pinned test data is required for nodes that fetch external data
 
+## Community Node Preference
+
+Before using `httpRequest` for any named external service (Slack, WhatsApp, Evolution API, HubSpot, etc.):
+
+1. Run `search_nodes(query: "<service-name>", source: "community")`
+2. If a community node exists:
+   - Prefer it over `httpRequest` — it handles auth, retries, and API versioning natively
+   - Check `isVerified` and `npmDownloads` to assess reliability
+   - If not yet installed in the client's n8n instance, **surface it explicitly** before proceeding:
+     ```
+     ⚠️ Nodo sugerido: <package-name>
+     Instalar en n8n: Settings → Community Nodes → Install Node → <package-name>
+     (o desde CLI: npm install <package-name>)
+     ¿Está instalado? Confirma antes de continuar.
+     ```
+3. If the community node is not installed and the user prefers not to install it, fall back to `httpRequest` with explicit documentation of why.
+
 ## Node-Specific Standards
 
 ### HTTP Request
 - Always set timeout (default: 30000ms)
 - Always handle 4xx and 5xx responses explicitly
 - Use `$credentials` for authentication, never hardcode tokens
+- **Before using**: check if a community node exists for the target service (see Community Node Preference above)
 
 ### Code (JavaScript)
 - Follow @n8n-code-javascript skill standards
@@ -26,6 +44,31 @@
 - Follow @ai-agent-standards.mdc
 - Always set a system prompt
 - Define tools explicitly — no open-ended tool access
+
+### Google Drive (reading documents)
+
+Never use `httpRequest` to call the Drive export API. Use native nodes instead.
+
+**Pattern A — IDs known** (preferred):
+Ask the user for the file IDs during planning (or find them in the requirements).
+Hardcode them directly in the Google Drive download node — skip the List step.
+```
+Google Drive (download, ID hardcoded) → Binary to Text → [next node]
+```
+
+**Pattern B — IDs unknown**:
+```
+Google Drive (list, folder ID) → Google Drive (download) → Binary to Text → [next node]
+```
+
+**Text extraction by file type:**
+- Google Docs native → `Binary to Text` node (export format: plain text)
+- PDF / DOCX / other → `Extract from File` node (handles binary formats)
+- Mixed folder → use `Switch` on `mimeType` before extraction
+
+**Rule:** always ask for file IDs during `/plan-workflow` before defaulting to Pattern B.
+If the user provides IDs → use Pattern A and document them in the plan.
+If the user cannot provide IDs → use Pattern B and note it as a known overhead.
 
 ### Set / Edit Fields
 - Use dot notation for nested fields
